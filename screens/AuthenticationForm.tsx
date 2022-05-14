@@ -3,6 +3,7 @@ import { Text, View, TextInput, StyleSheet, Button } from 'react-native';
 import Header from '../components/Header';
 import axios from 'axios';
 import config from '../config.json';
+import Store from '../expo/Store';
 
 type states = {
     username: string,
@@ -17,11 +18,19 @@ type states = {
 export default class AuthenticationForm extends Component {
 
     state: states = { username: '', password: '' };
+    #store: Store;
 
     constructor(props: any) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.#store = new Store();
+
+        // If the user is already logged in, redirect to the home page.
+        if (this.#store.get('token') != null) {
+            console.log('User is already logged in.');
+            // TODO : Redirect to the home page.
+        }
     }
 
     /**
@@ -37,12 +46,16 @@ export default class AuthenticationForm extends Component {
      * @description: This function is called when the user clicks the submit button.
      */
     handleSubmit() {
-        console.log(config.apiUrl)
         axios.post(config.apiUrl, {
             username: this.state.username,
             password: this.state.password
         }).then(response => {
-            console.log(response);
+            this.#store.save('token', response.data)
+                .then(() => {
+                    // TODO: Redirect to the home page
+                })
+                .catch(
+                    error => { console.log(error); });
         }).catch(error => {
             console.log(error);
         });
