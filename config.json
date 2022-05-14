@@ -1,0 +1,4 @@
+{
+    "apiUrl": "http://runeo.paleo.ch/api/me/token?",
+    "method": "POST"
+}

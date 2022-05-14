@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, Button } from 'react-native';
 import Header from '../components/Header';
+import axios from 'axios';
+import config from '../config.json';
 
-export type states = {
-    email: string,
+type states = {
+    username: string,
     password: string,
 }
 
-class AuthenticationForm extends Component {
+/**
+ * @class AuthenticationForm
+ * @extends {Component<any, states>}
+ * @description This class is used to authenticate the user.
+ */
+export default class AuthenticationForm extends Component {
+
+    state: states = { username: '', password: '' };
 
     constructor(props: any) {
         super(props);
@@ -15,22 +24,36 @@ class AuthenticationForm extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    state: states = { email: '', password: '' };
-
+    /**
+     * @description: This method is called when the user puts data in texts fields
+     * @param name 
+     * @param value 
+     */
     handleChange(name: string, value: string) {
         this.setState({ [name]: value });
     }
 
+    /**
+     * @description: This function is called when the user clicks the submit button.
+     */
     handleSubmit() {
-        console.log(this.state);
+        console.log(config.apiUrl)
+        axios.post(config.apiUrl, {
+            username: this.state.username,
+            password: this.state.password
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     render() {
         return (
             <View style={styles.form} >
                 <Header> Welcome back ! </Header>
-                <Text style={styles.label} >Email</Text>
-                <TextInput style={styles.input} value={this.state.email} onChangeText={(text) => this.handleChange('email', text)} />
+                <Text style={styles.label} >Nom d'utilisateur</Text>
+                <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} />
                 <Text style={styles.label}>Mot de passe</Text>
                 <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)}></TextInput>
                 <Button title='OK' onPress={this.handleSubmit} />
@@ -55,5 +78,3 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     }
 });
-
-export default AuthenticationForm;
