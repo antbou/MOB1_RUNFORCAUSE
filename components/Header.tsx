@@ -16,12 +16,12 @@ export default class Header extends Component<any> {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 21,
+        fontSize: 25,
         color: '#051c2f',
         fontWeight: 'bold',
-        paddingVertical: 12,
-        borderColor: '#051c2f',
-        borderWidth: 1,
+        paddingVertical: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 
