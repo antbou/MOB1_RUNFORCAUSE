@@ -1,4 +1,4 @@
 {
-    "apiUrl": "http://runeo.paleo.ch/api/me/token?",
+    "apiUrl": "https://mockapi.mycpnv.ch/api/rfc/mytoken?",
     "method": "POST"
 }
