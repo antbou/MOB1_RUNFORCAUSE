@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
 import axios from 'axios';
 import config from '../config.json';
-import Store from '../expo/Store';
+import Store from '../expo/StoreHelper';
 
 type states = {
     username: string,
@@ -59,7 +59,7 @@ export default class AuthenticationForm extends Component {
             // TODO : Redirect to the home page.
             console.log('User is logged in.');
         }).catch((error: any) => {
-            this.handleChange('error', error.response.data);
+            this.handleChange('error', 'Email ou mot de passe incorrect');
         });
     }
 
@@ -67,9 +67,9 @@ export default class AuthenticationForm extends Component {
         return (
             <View style={styles.form} >
                 <Text  >Nom d'utilisateur</Text>
-                <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} keyboardType={'email-address'} />
+                <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} keyboardType={'email-address'} placeholder="Email" />
                 <Text>Mot de passe</Text>
-                <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)}></TextInput>
+                <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
                 <Text style={styles.error}>{this.state.error}</Text>
                 <Pressable onPress={this.handleSubmit} style={styles.button}>
                     <Text style={styles.text}>Se connecter</Text>
@@ -104,8 +104,9 @@ const styles = StyleSheet.create({
     error: {
         textAlign: 'center',
         color: 'red',
-        fontSize: 20,
+        fontSize: 15,
         marginBottom: 10,
+        fontWeight: 'bold',
     },
     button: {
         shadowOffset: {
