@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
 import axios from 'axios';
-import config from '../config.json';
+import config from '../config/config.json';
 import StoreHelper from '../expo/StoreHelper';
 import Header from '../components/Header';
 import UserContext from '../context/UserContext';
@@ -25,24 +25,15 @@ type states = {
  * @description This class is used to authenticate the user.
  */
 export default class SignInScreen extends Component<IMyProps> {
-
     static contextType = UserContext;
-
     state: states = { username: '', password: '', error: '' };
     #store: StoreHelper;
 
     constructor(props: any) {
         super(props);
-
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-
         this.#store = props.route.params.store;
-        // // If the user is already logged in, redirect to the home page.
-        // if (this.#store.get('token') != null) {
-        //     console.log('User is already logged in.');
-        //     // TODO : Redirect to the home page.
-        // }
     }
 
     /**
@@ -58,27 +49,17 @@ export default class SignInScreen extends Component<IMyProps> {
      * @description: This function is called when the user clicks the submit button.
      */
     handleSubmit() {
-        // Clear the error message.
+        // Delete error message
         this.handleChange('error', '');
 
-        console.log(this.context.user.isLoggedIn);
-        this.context.user.isLoggedIn = true;
-        // this.context.user({ username: '', isLoggedIn: true });
-
-        // console.log(this.props.navigation.getState());
-
-        // Request the server to authenticate the user.
-        axios.post(config.apiUrl, {
+        axios.post(config.apiUrlToken, {
             username: this.state.username,
             password: this.state.password
         }).then((response: { data: any; }) => {
-            console.log(response.data);
-            return this.#store.save('token', response.data);
-        }).then(() => {
-            // TODO : Redirect to the home page.
-            console.log('User is logged in. ok');
-            // this.props.navigation.navigate('Home');
-
+            return this.#store.save('token', response.data).
+                then(() => {
+                    this.context.setIsLogguedIn(true);
+                });
         }).catch((error: any) => {
             console.log(error);
             this.handleChange('error', 'Email ou mot de passe incorrect');

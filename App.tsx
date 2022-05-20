@@ -3,69 +3,67 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import axios from 'axios';
 import SignInScreen from './screens/SignInScreen';
-import Header from './components/Header';
 import SettingsScreen from './screens/SettingsScreen';
 import StoreHelper from './expo/StoreHelper';
 import HomeScreen from "./screens/HomeScreen";
 import UserContext from "./context/UserContext";
+import config from './config/config.json';
 
-type MyState = {
+interface IMyState {
   user: {
     username: string,
     isLoggedIn: boolean,
   }
 }
 
-class App extends Component {
+class App extends Component<any, IMyState> {
 
-  store = new StoreHelper();
+  store: StoreHelper;
   Tab = createBottomTabNavigator();
   Stack = createNativeStackNavigator();
-  // Navigation = useNavigation();
 
-  state: MyState = {
-    user: {
-      username: '',
-      isLoggedIn: false
-    },
+  state: IMyState = {
+    user: { username: '', isLoggedIn: false },
   }
 
+  constructor(props: any) {
+    super(props);
+    this.store = new StoreHelper();
+    this.setIsLogguedIn = this.setIsLogguedIn.bind(this);
+    this.checkIfLoggedIn();
+  }
 
-  init() {
-    // TODO : Initialize the application.
-    console.log('Application is initialized.');
+  setIsLogguedIn(isLoggedIn: boolean) {
+    this.setState({
+      user: {
+        username: 'bonjour',
+        isLoggedIn: isLoggedIn
+      }
+    });
   }
 
   /**
-     * @description: This method is called when the user puts data in texts fields
-     * @param name 
-     * @param value 
-     */
-  handleChange(name: string, value: string) {
-    this.setState({ [name]: value });
-  }
-
-
-
-  // authContext = React.useMemo(
-  //   () => ({
-  //     signIn: async (data) => {
-  //       // In a production app, we need to send some data (usually username, password) to server and get a token
-  //       // We will also need to handle errors if sign in failed
-  //       // After getting token, we need to persist the token using `SecureStore`
-  //       // In the example, we'll use a dummy token
-
-  //       // this.dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-  //     },
-  //   }),
-  //   []
-  // )
-
+   * @description: This function checks if the user is logged in.
+   */
+  async checkIfLoggedIn() {
+    const token = await this.store.get('token');
+    console.log(token);
+    axios.get(config.apiUrlCheckToken, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response: { data: any; }) => {
+      this.setIsLogguedIn(true);
+    }).catch((error: any) => {
+      this.setIsLogguedIn(false);
+    });
+  };
 
   render() {
     return (
-      <UserContext.Provider value={this.state}>
+      <UserContext.Provider value={{ user: this.state.user, setIsLogguedIn: this.setIsLogguedIn }}>
         <NavigationContainer>
           {this.state.user.isLoggedIn ? (
             <this.Tab.Navigator>
@@ -73,7 +71,9 @@ class App extends Component {
               <this.Tab.Screen name="Settings" component={SettingsScreen} />
             </this.Tab.Navigator>
           ) : (
-            <this.Stack.Navigator>
+            <this.Stack.Navigator screenOptions={{
+              gestureEnabled: true
+            }}>
               <this.Stack.Screen name="SignIn" component={SignInScreen} initialParams={{ store: this.store }} options={{ title: 'Se connecter' }} />
             </this.Stack.Navigator>
           )}
@@ -82,14 +82,5 @@ class App extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;

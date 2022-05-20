@@ -1,9 +1,11 @@
 import React from 'react';
 
-type MyState = {
-    user: {}
-}
-
-const UserContext = React.createContext({ user: {} });
+const UserContext = React.createContext({
+    user: {
+        username: '',
+        isLoggedIn: false
+    },
+    setIsLogguedIn: {}
+});
 
 export default UserContext;
