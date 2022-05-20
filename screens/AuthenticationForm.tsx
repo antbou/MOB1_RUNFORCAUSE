@@ -3,6 +3,12 @@ import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
 import axios from 'axios';
 import config from '../config.json';
 import Store from '../expo/StoreHelper';
+import StoreHelper from '../expo/StoreHelper';
+
+
+interface IMyProps {
+    store: StoreHelper
+}
 
 type states = {
     username: string,
@@ -15,16 +21,18 @@ type states = {
  * @extends {Component<any, states>}
  * @description This class is used to authenticate the user.
  */
-export default class AuthenticationForm extends Component {
+export default class AuthenticationForm extends Component<IMyProps> {
 
     state: states = { username: '', password: '', error: '' };
     #store: Store;
 
     constructor(props: any) {
         super(props);
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.#store = new Store();
+
+        this.#store = props.store;
 
         // If the user is already logged in, redirect to the home page.
         if (this.#store.get('token') != null) {

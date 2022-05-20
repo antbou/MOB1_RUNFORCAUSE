@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-export default class Store {
+export default class StoreHelper {
     async save(key: string, value: any) {
         await SecureStore.setItemAsync(key, value);
     }

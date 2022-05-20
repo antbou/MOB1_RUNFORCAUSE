@@ -2,13 +2,31 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AuthenticationForm from './screens/AuthenticationForm';
 import Header from './components/Header';
+import StoreHelper from './expo/StoreHelper';
+
+type MyState = {
+  isLoggedIn: boolean,
+}
 
 class App extends Component {
+
+  store = new StoreHelper();
+
+  #state: MyState = {
+    isLoggedIn: false,
+  }
+
+
+  init() {
+    // TODO : Initialize the application.
+    console.log('Application is initialized.');
+  }
+
   render() {
     return (
       <View style={styles.container} >
         <Header> Connexion </Header>
-        <AuthenticationForm></AuthenticationForm>
+        <AuthenticationForm store={this.store} />
       </View>
     );
   }
