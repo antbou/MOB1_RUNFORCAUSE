@@ -46,7 +46,10 @@ export default class AuthenticationForm extends Component {
      * @description: This function is called when the user clicks the submit button.
      */
     handleSubmit() {
-        this.state.error = '';
+        // Clear the error message.
+        this.handleChange('error', '');
+
+        // Request the server to authenticate the user.
         axios.post(config.apiUrl, {
             username: this.state.username,
             password: this.state.password
@@ -56,7 +59,7 @@ export default class AuthenticationForm extends Component {
             // TODO : Redirect to the home page.
             console.log('User is logged in.');
         }).catch((error: any) => {
-            this.state.error = error.response.data;
+            this.handleChange('error', error.response.data);
         });
     }
 
@@ -68,7 +71,7 @@ export default class AuthenticationForm extends Component {
                 <Text>Mot de passe</Text>
                 <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)}></TextInput>
                 <Text style={styles.error}>{this.state.error}</Text>
-                <Pressable onPress={this.handleSubmit} style={styles.container}>
+                <Pressable onPress={this.handleSubmit} style={styles.button}>
                     <Text style={styles.text}>Se connecter</Text>
                 </Pressable>
             </View>
@@ -100,11 +103,11 @@ const styles = StyleSheet.create({
     },
     error: {
         textAlign: 'center',
-        height: 17.5,
         color: 'red',
-        fontSize: 12,
+        fontSize: 20,
+        marginBottom: 10,
     },
-    container: {
+    button: {
         shadowOffset: {
             width: 0,
             height: 2,
