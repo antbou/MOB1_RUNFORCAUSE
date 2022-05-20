@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
 import axios from 'axios';
 import config from '../config.json';
-import Store from '../expo/StoreHelper';
 import StoreHelper from '../expo/StoreHelper';
+import Header from '../components/Header';
+import UserContext from '../context/UserContext';
 
 
 interface IMyProps {
-    store: StoreHelper
+    store: StoreHelper,
+    navigation: any,
+    route: any,
 }
 
 type states = {
@@ -21,10 +24,12 @@ type states = {
  * @extends {Component<any, states>}
  * @description This class is used to authenticate the user.
  */
-export default class AuthenticationForm extends Component<IMyProps> {
+export default class SignInScreen extends Component<IMyProps> {
+
+    static contextType = UserContext;
 
     state: states = { username: '', password: '', error: '' };
-    #store: Store;
+    #store: StoreHelper;
 
     constructor(props: any) {
         super(props);
@@ -32,13 +37,12 @@ export default class AuthenticationForm extends Component<IMyProps> {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
 
-        this.#store = props.store;
-
-        // If the user is already logged in, redirect to the home page.
-        if (this.#store.get('token') != null) {
-            console.log('User is already logged in.');
-            // TODO : Redirect to the home page.
-        }
+        this.#store = props.route.params.store;
+        // // If the user is already logged in, redirect to the home page.
+        // if (this.#store.get('token') != null) {
+        //     console.log('User is already logged in.');
+        //     // TODO : Redirect to the home page.
+        // }
     }
 
     /**
@@ -57,32 +61,46 @@ export default class AuthenticationForm extends Component<IMyProps> {
         // Clear the error message.
         this.handleChange('error', '');
 
+        console.log(this.context.user.isLoggedIn);
+        this.context.user.isLoggedIn = true;
+        // this.context.user({ username: '', isLoggedIn: true });
+
+        // console.log(this.props.navigation.getState());
+
         // Request the server to authenticate the user.
         axios.post(config.apiUrl, {
             username: this.state.username,
             password: this.state.password
         }).then((response: { data: any; }) => {
+            console.log(response.data);
             return this.#store.save('token', response.data);
         }).then(() => {
             // TODO : Redirect to the home page.
-            console.log('User is logged in.');
+            console.log('User is logged in. ok');
+            // this.props.navigation.navigate('Home');
+
         }).catch((error: any) => {
+            console.log(error);
             this.handleChange('error', 'Email ou mot de passe incorrect');
         });
     }
 
     render() {
         return (
-            <View style={styles.form} >
-                <Text  >Nom d'utilisateur</Text>
-                <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} keyboardType={'email-address'} placeholder="Email" />
-                <Text>Mot de passe</Text>
-                <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
-                <Text style={styles.error}>{this.state.error}</Text>
-                <Pressable onPress={this.handleSubmit} style={styles.button}>
-                    <Text style={styles.text}>Se connecter</Text>
-                </Pressable>
-            </View>
+            <View style={styles.container} >
+                <Header> Connexion </Header>
+                <View style={styles.form} >
+                    <Text  >Nom d'utilisateur</Text>
+                    <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} keyboardType={'email-address'} placeholder="Email" />
+                    <Text>Mot de passe</Text>
+                    <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
+                    <Text style={styles.error}>{this.state.error}</Text>
+                    <Pressable onPress={this.handleSubmit} style={styles.button}>
+                        <Text style={styles.text}>Se connecter</Text>
+                    </Pressable>
+                </View>
+            </View >
+
         );
     }
 }
@@ -135,5 +153,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
