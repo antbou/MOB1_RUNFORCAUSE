@@ -4,12 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
-import SignInScreen from './screens/SignInScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import StoreHelper from './expo/StoreHelper';
-import HomeScreen from "./screens/HomeScreen";
-import UserContext from "./context/UserContext";
-import config from './config/config.json';
+import SignInScreen from './src/screens/SignInScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import StoreHelper from './src/expo/StoreHelper';
+import HomeScreen from "./src/screens/HomeScreen";
+import UserContext from "./src/context/UserContext";
+import config from './src/config/config.json';
 
 interface IMyState {
   user: {
