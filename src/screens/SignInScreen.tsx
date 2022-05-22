@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
-import axios from 'axios';
-import config from '../config/config.json';
 import StoreHelper from '../expo/StoreHelper';
 import Header from '../components/Header';
-import UserContext from '../context/UserContext';
+import { AuthContext } from '../navigation/AuthProvider';
 
 
 interface IMyProps {
@@ -13,7 +11,7 @@ interface IMyProps {
     route: any,
 }
 
-type states = {
+interface IStates {
     username: string,
     password: string,
     error: string
@@ -25,15 +23,14 @@ type states = {
  * @description This class is used to authenticate the user.
  */
 export default class SignInScreen extends Component<IMyProps> {
-    static contextType = UserContext;
-    state: states = { username: '', password: '', error: '' };
-    #store: StoreHelper;
+    static contextType = AuthContext;
+    state: IStates = { username: '', password: '', error: '' };
+    // #store: StoreHelper;
 
     constructor(props: any) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.#store = props.route.params.store;
     }
 
     /**
@@ -48,22 +45,15 @@ export default class SignInScreen extends Component<IMyProps> {
     /**
      * @description: This function is called when the user clicks the submit button.
      */
-    handleSubmit() {
-        // Delete error message
+    async handleSubmit() {
+        // // Delete error message
         this.handleChange('error', '');
 
-        axios.post(config.apiUrlToken, {
-            username: this.state.username,
-            password: this.state.password
-        }).then((response: { data: any; }) => {
-            return this.#store.save('token', response.data).
-                then(() => {
-                    this.context.setIsLogguedIn(true);
-                });
-        }).catch((error: any) => {
-            console.log(error);
+        try {
+            await this.context.login(this.state.username, this.state.password);
+        } catch (error) {
             this.handleChange('error', 'Email ou mot de passe incorrect');
-        });
+        }
     }
 
     render() {
