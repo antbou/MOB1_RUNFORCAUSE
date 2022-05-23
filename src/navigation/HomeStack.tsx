@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import TrackingScreen from '../screens/TrackingScreen';
 
 export default class HomeStack extends Component {
     constructor(props: any) {
@@ -12,9 +12,9 @@ export default class HomeStack extends Component {
 
     render() {
         return (
-            <this.Tab.Navigator initialRouteName='Home' >
-                <this.Tab.Screen name="Home" component={HomeScreen} />
-                <this.Tab.Screen name="Settings" component={SettingsScreen} />
+            <this.Tab.Navigator initialRouteName='Profile' >
+                <this.Tab.Screen name="Profile" component={ProfileScreen} />
+                <this.Tab.Screen name="Tracking" component={TrackingScreen} />
             </this.Tab.Navigator>
         );
     }

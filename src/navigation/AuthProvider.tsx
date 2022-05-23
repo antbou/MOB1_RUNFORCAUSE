@@ -30,7 +30,6 @@ export default class AuthProvider extends Component<any, IMyState>{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.signIn = this.signIn.bind(this);
-        StoreHelper.remove('token');
     }
 
     componentDidMount() {
