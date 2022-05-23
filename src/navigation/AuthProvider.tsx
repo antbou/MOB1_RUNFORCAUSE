@@ -6,10 +6,11 @@ import StoreHelper from '../expo/StoreHelper';
 
 
 interface IMyState {
+    loading: boolean
     user: {
         email: string,
         isLoggedIn: boolean,
-    }
+    },
 }
 
 /**
@@ -23,6 +24,7 @@ export default class AuthProvider extends Component<any, IMyState>{
     Stack = createNativeStackNavigator();
 
     state: IMyState = {
+        loading: true,
         user: { email: '', isLoggedIn: false },
     }
 
@@ -34,6 +36,10 @@ export default class AuthProvider extends Component<any, IMyState>{
 
     componentDidMount() {
         this.alreadyLoggedIn();
+    }
+
+    handleLoading = (loading: boolean) => {
+        this.setState({ loading });
     }
 
     handleChange(user: any) {
@@ -54,6 +60,7 @@ export default class AuthProvider extends Component<any, IMyState>{
         }).catch((error: any) => {
             this.handleChange({ email: '', isLoggedIn: false });
         });
+        this.handleLoading(false);
     }
 
     /**
@@ -73,11 +80,12 @@ export default class AuthProvider extends Component<any, IMyState>{
             console.log(error);
             throw error;
         });
+        this.handleLoading(false);
     }
 
     render() {
         return (
-            <AuthContext.Provider value={{ user: this.state.user, handleChange: this.handleChange, login: this.signIn }}>
+            <AuthContext.Provider value={{ user: this.state.user, handleChange: this.handleChange, login: this.signIn, loading: this.state.loading }}>
                 {this.props.children}
             </AuthContext.Provider >
         );

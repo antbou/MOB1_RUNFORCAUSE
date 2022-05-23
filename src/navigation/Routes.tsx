@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './AuthStack';
 import { AuthContext } from './AuthProvider';
 import HomeStack from './HomeStack';
+import SplashScreen from '../screens/SplashScreen';
 
 export default class Routes extends Component<any, any> {
     static contextType = AuthContext;
@@ -12,11 +13,11 @@ export default class Routes extends Component<any, any> {
     }
 
     render() {
+        let content = this.context.loading ? <SplashScreen /> : this.context.user.isLoggedIn ? (<HomeStack />) : (<AuthStack />);
+
         return (
             <NavigationContainer>
-                {this.context.user.isLoggedIn ?
-                    (<HomeStack />) :
-                    (<AuthStack />)}
+                {content}
             </NavigationContainer>
         );
     }
