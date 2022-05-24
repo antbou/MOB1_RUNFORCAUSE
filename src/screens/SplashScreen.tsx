@@ -10,10 +10,11 @@ const Logo = require('../../assets/runforcause.png')
 const BGColor = "transparent";
 
 interface IProps {
+    setAnimationFinish: any;
     loading: any;
 }
 
-const SplashScreen = React.forwardRef((props, ref) => {
+const SplashScreen = (props: IProps) => {
 
     // SafeArea Value...
     const edges = useSafeAreaInsets();
@@ -32,11 +33,10 @@ const SplashScreen = React.forwardRef((props, ref) => {
     // Animating Content...
     const contentTransition = useRef(new Animated.Value(Dimensions.get('window').height)).current;
 
-    useImperativeHandle(ref, () => ({
-        start: () => {
-            animate();
-        },
-    }))
+    useEffect(() => {
+        // Start Animation as soon as the app know if user is logged in or not
+        if (!props.loading) animate()
+    });
 
     const animate = () => {
         Animated.parallel([
@@ -96,9 +96,8 @@ const SplashScreen = React.forwardRef((props, ref) => {
             )
         ]).start(
             () => {
-                console.log("Animation Finished...");
-                props.loading(true);
-                // console.log(props)
+                // Inform Parent that the animation is done
+                props.setAnimationFinish(true);
             }
         );
 
@@ -140,16 +139,6 @@ const SplashScreen = React.forwardRef((props, ref) => {
                         ]
                     }}></Animated.Image>
 
-                    <Animated.Text style={{
-                        fontSize: 25,
-                        fontWeight: 'bold',
-                        color: 'white',
-                        transform: [
-                            { translateY: moveTitle.y },
-                            { scale: scaleTitle }
-                        ]
-                    }}>Chatty</Animated.Text>
-
                 </Animated.View>
 
             </Animated.View>
@@ -169,6 +158,6 @@ const SplashScreen = React.forwardRef((props, ref) => {
             </Animated.View>
         </View>
     );
-});
+};
 
 export default SplashScreen;

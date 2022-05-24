@@ -5,52 +5,37 @@ import { AuthContext } from './AuthProvider';
 import HomeStack from './HomeStack';
 import SplashScreen from '../screens/SplashScreen';
 
-export default class Routes extends Component<any, any> {
+interface IMyState {
+    isAnimationFinish: boolean;
+}
+
+export default class Routes extends Component {
     static contextType = AuthContext;
 
-    child: any;
-    state = {
-        isLoadingFinished: false,
+    state: IMyState = {
+        isAnimationFinish: false,
     }
-
 
     constructor(props: any) {
         super(props);
-        this.child = React.createRef();
-        this.setLoading = this.setLoading.bind(this);
+        this.setAnimationFinish = this.setAnimationFinish.bind(this);
     }
 
-    setLoading(isLoading: boolean) {
-        console.log(isLoading + 'loading')
-        this.setState({ isLoadingFinished: isLoading });
-    }
-
-    componentDidMount() {
-        console.log(this.child)
-        if (this.context.loading == false && this.child.current != null) {
-            this.child.current.start()
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.context.loading == false && this.child.current != null) {
-            this.child.current.start()
-        }
+    setAnimationFinish(isLoading: boolean) {
+        this.setState({ isAnimationFinish: isLoading });
     }
 
     render() {
-        if (this.state.isLoadingFinished == false) {
+        // Display Splash Screen as long as the app is loading and the animation is not finished
+        if (!this.state.isAnimationFinish) {
             return (
-                <SplashScreen ref={this.child} loading={this.setLoading} />
+                <SplashScreen setAnimationFinish={this.setAnimationFinish} loading={this.context.loading} />
             )
         }
-
-        if (this.state.isLoadingFinished && this.context.loading == false) {
-            return (
-                <NavigationContainer>
-                    {this.context.user.isLoggedIn ? (<HomeStack />) : (<AuthStack />)}
-                </NavigationContainer>
-            )
-        }
+        return (
+            <NavigationContainer>
+                {this.context.user.isLoggedIn ? (<HomeStack />) : (<AuthStack />)}
+            </NavigationContainer>
+        )
     }
 }
