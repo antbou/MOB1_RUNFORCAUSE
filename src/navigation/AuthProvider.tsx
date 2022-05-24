@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import config from '../config/config.json';
 import axios from 'axios';
 import StoreHelper from '../expo/StoreHelper';
@@ -32,6 +33,7 @@ export default class AuthProvider extends Component<any, IMyState>{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.signIn = this.signIn.bind(this);
+
     }
 
     componentDidMount() {
@@ -85,9 +87,11 @@ export default class AuthProvider extends Component<any, IMyState>{
 
     render() {
         return (
-            <AuthContext.Provider value={{ user: this.state.user, handleChange: this.handleChange, login: this.signIn, loading: this.state.loading }}>
-                {this.props.children}
-            </AuthContext.Provider >
+            <SafeAreaProvider>
+                <AuthContext.Provider value={{ user: this.state.user, handleChange: this.handleChange, login: this.signIn, loading: this.state.loading }}>
+                    {this.props.children}
+                </AuthContext.Provider >
+            </SafeAreaProvider>
         );
     }
 }

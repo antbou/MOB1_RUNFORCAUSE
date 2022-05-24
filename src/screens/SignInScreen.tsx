@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, StyleSheet, Pressable } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Pressable, Button } from 'react-native';
 import StoreHelper from '../expo/StoreHelper';
 import Header from '../components/Header';
 import { AuthContext } from '../navigation/AuthProvider';
@@ -25,7 +25,6 @@ interface IStates {
 export default class SignInScreen extends Component<IMyProps> {
     static contextType = AuthContext;
     state: IStates = { username: '', password: '', error: '' };
-    // #store: StoreHelper;
 
     constructor(props: any) {
         super(props);
@@ -46,7 +45,7 @@ export default class SignInScreen extends Component<IMyProps> {
      * @description: This function is called when the user clicks the submit button.
      */
     async handleSubmit() {
-        // // Delete error message
+        // Delete error message
         this.handleChange('error', '');
 
         try {
@@ -66,6 +65,9 @@ export default class SignInScreen extends Component<IMyProps> {
                     <Text>Mot de passe</Text>
                     <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
                     <Text style={styles.error}>{this.state.error}</Text>
+                    <Button onPress={() => {
+                        { this.props.navigation.navigate('SignUp') }
+                    }} title={'S\'inscrire'} />
                     <Pressable onPress={this.handleSubmit} style={styles.button}>
                         <Text style={styles.text}>Se connecter</Text>
                     </Pressable>
