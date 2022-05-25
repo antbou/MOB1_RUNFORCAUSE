@@ -33,7 +33,6 @@ export default class AuthProvider extends Component<any, IMyState>{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.signIn = this.signIn.bind(this);
-
     }
 
     componentDidMount() {
@@ -77,7 +76,7 @@ export default class AuthProvider extends Component<any, IMyState>{
         }).then(async (response) => {
             const token = response.data;
             await StoreHelper.save('token', token);
-            this.handleChange({ email: email, isLoggedIn: true });
+            this.alreadyLoggedIn();
         }).catch((error: any) => {
             console.log(error);
             throw error;
