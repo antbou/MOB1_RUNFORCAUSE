@@ -1,4 +1,5 @@
 {
     "apiUrlToken": "https://mockapi.mycpnv.ch/api/rfc/mytoken?",
-    "apiUrlCheckToken": "https://mockapi.mycpnv.ch/api/rfc/me?"
+    "apiUrlCheckToken": "https://mockapi.mycpnv.ch/api/rfc/me?",
+    "apiUrlUserPicture": "https://mockapi.mycpnv.ch/storage/pics/"
 }

@@ -65,9 +65,6 @@ export default class SignInScreen extends Component<IMyProps> {
                     <Text>Mot de passe</Text>
                     <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
                     <Text style={styles.error}>{this.state.error}</Text>
-                    <Button onPress={() => {
-                        { this.props.navigation.navigate('SignUp') }
-                    }} title={'S\'inscrire'} />
                     <Pressable onPress={this.handleSubmit} style={styles.button}>
                         <Text style={styles.text}>Se connecter</Text>
                     </Pressable>

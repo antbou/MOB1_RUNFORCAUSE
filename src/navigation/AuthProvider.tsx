@@ -10,6 +10,11 @@ interface IMyState {
     loading: boolean
     user: {
         email: string,
+        description: string,
+        lastname: string,
+        firstname: string,
+        picture: string,
+        phone: string,
         isLoggedIn: boolean,
     },
 }
@@ -26,7 +31,15 @@ export default class AuthProvider extends Component<any, IMyState>{
 
     state: IMyState = {
         loading: true,
-        user: { email: '', isLoggedIn: false },
+        user: {
+            email: '',
+            description: '',
+            lastname: '',
+            firstname: '',
+            picture: '',
+            phone: '',
+            isLoggedIn: false
+        },
     }
 
     constructor(props: any) {
@@ -57,7 +70,15 @@ export default class AuthProvider extends Component<any, IMyState>{
                 Authorization: `Bearer ${token}`
             }
         }).then(async (response: { data: any; }) => {
-            this.handleChange({ email: response.data.email, isLoggedIn: true });
+            this.handleChange({
+                email: response.data.email,
+                description: response.data.description,
+                lastname: response.data.lastname,
+                firstname: response.data.firstname,
+                picture: response.data.picture,
+                phone: response.data.phone,
+                isLoggedIn: true
+            });
         }).catch((error: any) => {
             this.handleChange({ email: '', isLoggedIn: false });
         });

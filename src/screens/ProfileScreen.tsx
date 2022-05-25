@@ -3,13 +3,13 @@ import { View, StyleSheet } from 'react-native';
 import {
     Avatar,
     Title,
-    Caption,
     Text,
     TouchableRipple,
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../navigation/AuthProvider';
+import config from '../config/config.json';
 
 export default class ProfileScreen extends Component {
     static contextType = AuthContext;
@@ -24,29 +24,37 @@ export default class ProfileScreen extends Component {
                     <View style={{ flexDirection: 'row', marginTop: 15 }}>
                         <Avatar.Image
                             source={{
-                                uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+                                uri: config.apiUrlUserPicture + this.context.user.picture,
                             }}
                             size={80}
+
                         />
                         <View style={{ marginLeft: 20 }}>
                             <Title style={[styles.title, {
                                 marginTop: 15,
                                 marginBottom: 5,
-                            }]}>John Doe</Title>
-                            <Caption style={styles.caption}>@j_doe</Caption>
+                            }]}>{this.context.user.firstname} {this.context.user.lastname}</Title>
                         </View>
                     </View>
                 </View>
 
                 <View style={styles.userInfoSection}>
                     <View style={styles.row}>
-                        <Icon name="phone" color="#777777" size={20} />
-                        <Text style={{ color: "#777777", marginLeft: 20 }}>+91-900000009</Text>
-                    </View>
-                    <View style={styles.row}>
                         <Icon name="email" color="#777777" size={20} />
                         <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.email}</Text>
                     </View>
+                    <View style={styles.row}>
+                        <Icon name="phone" color="#777777" size={20} />
+                        <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.phone}</Text>
+                    </View>
+                    {
+                        this.context.user.description != null ? (
+                            <View style={styles.row}>
+                                <Icon name="comment-text-outline" color="#777777" size={20} />
+                                <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.description}</Text>
+                            </View>
+                        ) : null
+                    }
                 </View>
                 <View style={styles.menuWrapper}>
                     <TouchableRipple onPress={() => { }}>
@@ -65,6 +73,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fafafa',
+        paddingTop: 15,
+        paddingEnd: 15,
+        paddingStart: 15,
     },
     userInfoSection: {
         paddingHorizontal: 30,
@@ -74,22 +85,9 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
-    caption: {
-        fontSize: 14,
-        lineHeight: 14,
-        fontWeight: '500',
-    },
     row: {
         flexDirection: 'row',
         marginBottom: 10,
-    },
-    infoBox: {
-        width: '50%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderTopColor: '#EFEFEF',
-        borderTopWidth: 1,
-        borderBottomColor: '#EFEFEF',
     },
     menuWrapper: {
         marginTop: 10,
