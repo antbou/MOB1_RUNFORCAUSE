@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     Avatar,
     Title,
@@ -19,57 +20,63 @@ export default class ProfileScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.userInfoSection}>
-                    <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                        <Avatar.Image
-                            source={{
-                                uri: config.apiUrlUserPicture + this.context.user.picture,
-                            }}
-                            size={80}
+            <SafeAreaView style={styles.SafeAreaView}>
+                <View style={styles.container}>
+                    <View style={styles.userInfoSection}>
+                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                            <Avatar.Image
+                                source={{
+                                    uri: config.apiUrlUserPicture + this.context.user.picture,
+                                }}
+                                size={80}
 
-                        />
-                        <View style={{ marginLeft: 20 }}>
-                            <Title style={[styles.title, {
-                                marginTop: 15,
-                                marginBottom: 5,
-                            }]}>{this.context.user.firstname} {this.context.user.lastname}</Title>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.userInfoSection}>
-                    <View style={styles.row}>
-                        <Icon name="email" color="#777777" size={20} />
-                        <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.email}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Icon name="phone" color="#777777" size={20} />
-                        <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.phone}</Text>
-                    </View>
-                    {
-                        this.context.user.description != null ? (
-                            <View style={styles.row}>
-                                <Icon name="comment-text-outline" color="#777777" size={20} />
-                                <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.description}</Text>
+                            />
+                            <View style={{ marginLeft: 20 }}>
+                                <Title style={[styles.title, {
+                                    marginTop: 15,
+                                    marginBottom: 5,
+                                }]}>{this.context.user.firstname} {this.context.user.lastname}</Title>
                             </View>
-                        ) : null
-                    }
-                </View>
-                <View style={styles.menuWrapper}>
-                    <TouchableRipple onPress={() => { }}>
-                        <View style={styles.menuItem}>
-                            <Icon name="cog-outline" color="#FF6347" size={25} />
-                            <Text style={styles.menuItemText}>Settings</Text>
                         </View>
-                    </TouchableRipple>
+                    </View>
+
+                    <View style={styles.userInfoSection}>
+                        <View style={styles.row}>
+                            <Icon name="email" color="#777777" size={20} />
+                            <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.email}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Icon name="phone" color="#777777" size={20} />
+                            <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.phone}</Text>
+                        </View>
+                        {
+                            this.context.user.description != null ? (
+                                <View style={styles.row}>
+                                    <Icon name="comment-text-outline" color="#777777" size={20} />
+                                    <Text style={{ color: "#777777", marginLeft: 20 }}>{this.context.user.description}</Text>
+                                </View>
+                            ) : null
+                        }
+                    </View>
+                    <View style={styles.menuWrapper}>
+                        <TouchableRipple onPress={() => { }}>
+                            <View style={styles.menuItem}>
+                                <Icon name="cog-outline" color="#FF6347" size={25} />
+                                <Text style={styles.menuItemText}>Settings</Text>
+                            </View>
+                        </TouchableRipple>
+                    </View>
                 </View>
-            </View>
+            </SafeAreaView>
         );
     }
 };
 
 const styles = StyleSheet.create({
+    SafeAreaView: {
+        flex: 1,
+        backgroundColor: '#fafafa',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fafafa',

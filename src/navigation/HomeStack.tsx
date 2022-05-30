@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileScreen from '../screens/ProfileScreen';
 import TrackingScreen from '../screens/TrackingScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default class HomeStack extends Component {
     constructor(props: any) {
@@ -13,7 +14,7 @@ export default class HomeStack extends Component {
 
     render() {
         return (
-            <this.Tab.Navigator initialRouteName='Profile'>
+            <this.Tab.Navigator initialRouteName='Profile' screenOptions={{ headerShown: false }}>
                 <this.Tab.Screen name="Profile" component={ProfileScreen} options={{
                     tabBarIcon: ({ size, color }) => (<Icon name={"rocket"} color={color} size={size} />)
                 }} />
