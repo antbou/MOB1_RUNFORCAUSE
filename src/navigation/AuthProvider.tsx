@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import config from '../config/config.json';
 import axios from 'axios';
 import StoreHelper from '../expo/StoreHelper';
 
 
-interface IMyState {
+interface AppContextInterface {
+    handleChangeUser: (user: any) => void;
+    login: (username: string, password: string) => void;
     loading: boolean
     user: {
         email: string,
-        description: string,
-        lastname: string,
-        firstname: string,
+        name: string,
         picture: string,
         phone: string,
         isLoggedIn: boolean,
@@ -23,19 +22,15 @@ interface IMyState {
  * This provider is created to access user in the whole app.
  */
 
-export const AuthContext = React.createContext({});
+export const AuthContext = React.createContext<AppContextInterface>(null as any);
 
-export default class AuthProvider extends Component<any, IMyState>{
+export default class AuthProvider extends Component {
 
-    Stack = createNativeStackNavigator();
-
-    state: IMyState = {
+    state = {
         loading: true,
         user: {
             email: '',
-            description: '',
-            lastname: '',
-            firstname: '',
+            name: '',
             picture: '',
             phone: '',
             isLoggedIn: false
@@ -72,9 +67,7 @@ export default class AuthProvider extends Component<any, IMyState>{
         }).then(async (response: { data: any; }) => {
             this.handleChange({
                 email: response.data.email,
-                description: response.data.description,
-                lastname: response.data.lastname,
-                firstname: response.data.firstname,
+                name: response.data.name,
                 picture: response.data.picture,
                 phone: response.data.phone,
                 isLoggedIn: true
@@ -108,7 +101,7 @@ export default class AuthProvider extends Component<any, IMyState>{
     render() {
         return (
             <SafeAreaProvider>
-                <AuthContext.Provider value={{ user: this.state.user, handleChange: this.handleChange, login: this.signIn, loading: this.state.loading }}>
+                <AuthContext.Provider value={{ user: this.state.user, handleChangeUser: this.handleChange, login: this.signIn, loading: this.state.loading }}>
                     {this.props.children}
                 </AuthContext.Provider >
             </SafeAreaProvider>

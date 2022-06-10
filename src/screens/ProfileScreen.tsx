@@ -28,14 +28,13 @@ export default class ProfileScreen extends Component {
                                 source={{
                                     uri: config.apiUrlUserPicture + this.context.user.picture,
                                 }}
-                                size={80}
-
+                                size={100}
                             />
                             <View style={{ marginLeft: 20 }}>
                                 <Title style={[styles.title, {
                                     marginTop: 15,
                                     marginBottom: 5,
-                                }]}>{this.context.user.firstname} {this.context.user.lastname}</Title>
+                                }]}>{this.context.user.name}</Title>
                             </View>
                         </View>
                     </View>
