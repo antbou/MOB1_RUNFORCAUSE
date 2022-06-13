@@ -1,5 +1,5 @@
-import React, { useEffect, useImperativeHandle, useRef } from 'react'
-import { Animated, Dimensions, Image, Text, View } from "react-native";
+import React, { useEffect, useRef } from 'react'
+import { Animated, Dimensions, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Logo....

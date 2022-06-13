@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import AuthProvider from './AuthProvider';
 import Routes from './Routes';
 
-interface IMyState {
-    user: {
-        username: string,
-        isLoggedIn: boolean,
-    }
-}
-
-export default class Providers extends Component<any, IMyState> {
+export default class Providers extends Component {
 
     constructor(props: any) {
         super(props);

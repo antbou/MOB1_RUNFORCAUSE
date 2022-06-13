@@ -49,7 +49,7 @@ export default class SignInScreen extends Component<IMyProps> {
         this.handleChange('error', '');
 
         try {
-            await this.context.login(this.state.username, this.state.password);
+            await this.context.authenticate(this.state.username, this.state.password);
         } catch (error) {
             this.handleChange('error', 'Email ou mot de passe incorrect');
         }

@@ -1,8 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, SafeAreaView, Pressable } from "react-native";
-import { Avatar, TextInput } from "react-native-paper";
+import React, { useEffect } from "react";
+import { Text, StyleSheet, SafeAreaView, Pressable } from "react-native";
+import { TextInput } from "react-native-paper";
 import { AuthContext } from '../navigation/AuthProvider';
-import config from '../config/config.json';
 
 export default function ProfileEditScreen({ navigation }: any) {
 
@@ -18,7 +17,7 @@ export default function ProfileEditScreen({ navigation }: any) {
 
 
     const handleChange = () => {
-        context.handleChangeUser(user);
+        context.setUser(user);
         navigation.goBack();
     };
 
