@@ -15,6 +15,7 @@ interface IContextInterface {
     },
     setUser: (user: any) => void;
     authenticate: (username: string, password: string) => void;
+    patchUser: (user: any) => void;
     loading: boolean
 }
 
@@ -87,9 +88,30 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         setLoading(false);
     }
 
+    const patchUser = async (user: IUser) => {
+        const token = await StoreHelper.get('token');
+        axios.post(config.apiUrlUpdateUser, {
+            _method: 'PATCH',
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(() => {
+            setUser(user);
+        }).catch((error: any) => {
+            console.log(error);
+            throw error;
+        });
+    }
+
+
+
     return (
         <SafeAreaProvider>
-            <AuthContext.Provider value={{ user, setUser, authenticate, loading }}>
+            <AuthContext.Provider value={{ user, setUser, authenticate, loading, patchUser }}>
                 {children}
             </AuthContext.Provider >
         </SafeAreaProvider>

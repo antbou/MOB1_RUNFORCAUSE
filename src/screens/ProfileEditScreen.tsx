@@ -6,6 +6,7 @@ import { AuthContext } from '../navigation/AuthProvider';
 export default function ProfileEditScreen({ navigation }: any) {
 
     const context = React.useContext(AuthContext);
+    const [error, setError] = React.useState('');
 
     const [user, setUser] = React.useState({
         name: context.user.name,
@@ -17,8 +18,12 @@ export default function ProfileEditScreen({ navigation }: any) {
 
 
     const handleChange = () => {
-        context.setUser(user);
-        navigation.goBack();
+        try {
+            context.patchUser(user);
+            navigation.navigate('Profile');
+        } catch (error: any) {
+            setError(error.message);
+        }
     };
 
     return (
@@ -26,7 +31,7 @@ export default function ProfileEditScreen({ navigation }: any) {
             <TextInput label="Name" value={user.name} onChangeText={(text) => setUser({ ...user, name: text })} />
             <TextInput label="Email" value={user.email} onChangeText={(text) => setUser({ ...user, email: text })} />
             <TextInput label="Phone" value={user.phone} onChangeText={(text) => setUser({ ...user, phone: text })} />
-
+            <Text style={styles.error}>{error}</Text>
             <Pressable onPress={handleChange} style={styles.button}>
                 <Text style={styles.text}>Modifier le profil</Text>
             </Pressable>
@@ -88,5 +93,12 @@ const styles = StyleSheet.create({
         color: '#fafafa',
         fontSize: 16,
         fontWeight: '600',
-    }
+    },
+    error: {
+        textAlign: 'center',
+        color: 'red',
+        fontSize: 15,
+        marginBottom: 10,
+        fontWeight: 'bold',
+    },
 });
