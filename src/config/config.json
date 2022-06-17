@@ -1,6 +1,7 @@
 {
-    "apiUrlToken": "https://mockapi.mycpnv.ch/api/rfc/mytoken?",
-    "apiUrlCheckToken": "https://mockapi.mycpnv.ch/api/rfc/me?",
-    "apiUrlUpdateUser": "https://mockapi.mycpnv.ch/api/rfc/profile?",
-    "apiUrlUserPicture": "https://mockapi.mycpnv.ch/storage/pics/"
+    "server": "http://10.229.33.32:8000",
+    "apiUrlToken": "/api/rfc/mytoken?",
+    "apiUrlCheckToken": "/api/rfc/me?",
+    "apiUrlUpdateUser": "/api/rfc/profile?",
+    "apiUrlUserPicture": "/storage/pics/"
 }

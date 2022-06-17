@@ -26,7 +26,7 @@ export default class ProfileScreen extends Component {
                         <View style={{ flexDirection: 'row', marginTop: 15 }}>
                             <Avatar.Image
                                 source={{
-                                    uri: config.apiUrlUserPicture + this.context.user.picture,
+                                    uri: config.server + config.apiUrlUserPicture + this.context.user.picture,
                                 }}
                                 size={100}
                             />

@@ -20,7 +20,7 @@ export default function ProfileEditScreen({ navigation }: any) {
     const handleChange = () => {
         try {
             context.patchUser(user);
-            navigation.navigate('Profile');
+            navigation.goBack();
         } catch (error: any) {
             setError(error.message);
         }

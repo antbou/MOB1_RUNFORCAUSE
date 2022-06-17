@@ -1,4 +1,4 @@
-import React, { Component, createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import config from '../config/config.json';
 import axios from 'axios';
@@ -49,7 +49,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const tokenVerify = async () => {
         const token = await StoreHelper.get('token');
-        await axios.get(config.apiUrlCheckToken, {
+        await axios.get(
+            config.server + config.apiUrlCheckToken, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -62,6 +63,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 isLoggedIn: true
             });
         }).catch((error: any) => {
+            console.log(error);
             setUser({
                 email: '',
                 name: '',
@@ -74,7 +76,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
 
     const authenticate = async (email: string, password: string) => {
-        await axios.post(config.apiUrlToken, {
+        await axios.post(config.server + config.apiUrlToken, {
             username: email,
             password: password
         }).then(async (response) => {
@@ -90,7 +92,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const patchUser = async (user: IUser) => {
         const token = await StoreHelper.get('token');
-        axios.post(config.apiUrlUpdateUser, {
+        axios.post(config.server + config.apiUrlUpdateUser, {
             _method: 'PATCH',
             name: user.name,
             phone: user.phone,
