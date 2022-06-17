@@ -1,7 +1,0 @@
-{
-    "server": "http://10.229.33.32:8000",
-    "apiUrlToken": "/api/rfc/mytoken?",
-    "apiUrlCheckToken": "/api/rfc/me?",
-    "apiUrlUpdateUser": "/api/rfc/profile?",
-    "apiUrlUserPicture": "/storage/pics/"
-}
