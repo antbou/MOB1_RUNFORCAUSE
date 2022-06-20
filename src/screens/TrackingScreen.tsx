@@ -1,38 +1,39 @@
 
-import React, { useEffect, useState } from 'react';
+
 import { AuthContext } from '../navigation/AuthProvider';
-import config from '../config/config.json';
+import React from 'react';
+import { View, StyleSheet, Pressable, Text, SafeAreaView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Dimensions } from 'react-native';
+import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
-import { Dimensions, SafeAreaView } from 'react-native';
-import MapView, { Marker, Region } from 'react-native-maps';
-import { LocationGeocodedAddress, LocationObject } from 'expo-location';
+import axios from 'axios';
+
 
 export default function TrackingScreen() {
     const context = React.useContext(AuthContext);
-    const [address, setAddress] = useState<LocationGeocodedAddress | null>(null);
-    const [errorMsg, setErrorMsg] = useState('');
-    const [region, setRegion] = useState({
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-    });
+    const [location, setLocation] = useState<Location.LocationObject>();
+
 
     useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
+        Location.getForegroundPermissionsAsync().then(async (perm) => {
+            if (!perm.granted) {
+                await Location.requestForegroundPermissionsAsync().catch(console.error);
             }
-            let location = await Location.getCurrentPositionAsync({});
-            setRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
+            const options: Location.LocationOptions = {
+                accuracy: Location.Accuracy.BestForNavigation,
+                timeInterval: 1000 * 5,
+            };
+            Location.watchPositionAsync(options, (location) => {
+                setLocation(location);
+                console.log('Location: ' + location.coords.latitude + ' ' + location.coords.longitude);
+                // axios.defaults.headers.common['Authorization'] = `Bearer ${user?.token}`;
+                // axios.post(config.apiUrl + 'location', {
+                //   lat: location.coords.latitude,
+                //   long: location.coords.longitude,
+                // }).catch(console.error);
             });
-        })();
+        });
     }, []);
 
     return (
@@ -43,19 +44,15 @@ export default function TrackingScreen() {
                     height: Dimensions.get('window').height
                 }}
                 region={{
-                    latitude: region.latitude ?? 0,
-                    longitude: region.longitude ?? 0,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
+                    latitudeDelta: 0.0922, // Default value
+                    longitudeDelta: 0.0421, // Default value
+                    latitude: location?.coords.latitude ?? 0,
+                    longitude: location?.coords.longitude ?? 0,
                 }}
-                onRegionChangeComplete={(region) => setRegion(region)}
-            >
-                <Marker
-                    coordinate={region}
-                    title={address?.city ?? 'Unknown'}
-                    description={`${address?.street ?? 'Unknown'} ${address?.streetNumber ?? ''}`}
-                />
-            </MapView>
+                scrollEnabled={false}
+                zoomEnabled={false}
+            />
+            {/* </MapView> */}
         </SafeAreaView>
     );
 }
