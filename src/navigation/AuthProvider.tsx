@@ -7,6 +7,7 @@ import StoreHelper from '../expo/StoreHelper';
 
 interface IContextInterface {
     user: {
+        token: any;
         email: string,
         name: string,
         picture: string,
@@ -25,6 +26,7 @@ interface IUser {
     picture: string,
     phone: string,
     isLoggedIn: boolean,
+    token: string,
 }
 
 /**
@@ -39,18 +41,19 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         name: '',
         picture: '',
         phone: '',
-        isLoggedIn: false
+        isLoggedIn: false,
+        token: '',
     });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        tokenVerify();
+        loadUser();
     }, []);
 
-    const tokenVerify = async () => {
+    const loadUser = async () => {
         const token = await StoreHelper.get('token');
         await axios.get(
-            config.server + config.apiUrlCheckToken, {
+            config.server + '/api/rfc/me?', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -60,7 +63,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 name: response.data.name,
                 picture: response.data.picture,
                 phone: response.data.phone,
-                isLoggedIn: true
+                isLoggedIn: true,
+                token: token ?? '',
             });
         }).catch((error: any) => {
             console.log(error);
@@ -69,22 +73,23 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 name: '',
                 picture: '',
                 phone: '',
-                isLoggedIn: false
+                isLoggedIn: false,
+                token: '',
             });
         });
         setLoading(false);
     }
 
     const authenticate = async (email: string, password: string) => {
-        await axios.post(config.server + config.apiUrlToken, {
+        await axios.post(config.server + '/api/rfc/mytoken?', {
             username: email,
             password: password
         }).then(async (response) => {
             const token = response.data;
             await StoreHelper.save('token', token);
-            tokenVerify();
+            loadUser();
         }).catch((error: any) => {
-            console.log(error);
+            console.log(error + 'bib');
             throw error;
         });
         setLoading(false);
@@ -92,7 +97,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const patchUser = async (user: IUser) => {
         const token = await StoreHelper.get('token');
-        axios.post(config.server + config.apiUrlUpdateUser, {
+        axios.post(config.server + '/api/rfc/profile?', {
             _method: 'PATCH',
             name: user.name,
             phone: user.phone,
