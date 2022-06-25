@@ -1,7 +1,3 @@
 {
-    "server": "http",
-    "apiUrlToken": "/",
-    "apiUrlCheckToken": "/",
-    "apiUrlUpdateUser": "/",
-    "apiUrlUserPicture": "/"
+    "server": "http://"
 }
