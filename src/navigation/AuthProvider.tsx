@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import config from '../config/config.json';
+import config from '../config/config';
 import axios from 'axios';
 import StoreHelper from '../expo/StoreHelper';
 

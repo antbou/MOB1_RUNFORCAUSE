@@ -10,7 +10,7 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../navigation/AuthProvider';
-import config from '../config/config.json';
+import config from '../config/config';
 import axios from 'axios';
 
 export default function ProfileScreen() {
