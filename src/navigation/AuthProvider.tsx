@@ -67,7 +67,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 token: token ?? '',
             });
         }).catch((error: any) => {
-            console.log(error);
             setUser({
                 email: '',
                 name: '',
@@ -76,6 +75,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
                 isLoggedIn: false,
                 token: '',
             });
+            StoreHelper.remove('token');
         });
         setLoading(false);
     }
@@ -89,7 +89,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             await StoreHelper.save('token', token);
             loadUser();
         }).catch((error: any) => {
-            console.log(error + 'bib');
+            StoreHelper.remove('token');
             throw error;
         });
         setLoading(false);

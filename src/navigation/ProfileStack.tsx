@@ -1,10 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from '../screens/ProfileScreen';
-import { Button, IconButton, Colors } from 'react-native-paper';
+import { IconButton, Colors } from 'react-native-paper';
 import ProfileEditScreen from '../screens/ProfileEditScreen';
-
 
 const Stack = createNativeStackNavigator();
 
