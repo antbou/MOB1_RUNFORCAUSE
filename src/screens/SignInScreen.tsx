@@ -1,78 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View, TextInput, StyleSheet, Pressable, Button } from 'react-native';
-import StoreHelper from '../expo/StoreHelper';
 import Header from '../components/Header';
 import { AuthContext } from '../navigation/AuthProvider';
 
 
-interface IMyProps {
-    store: StoreHelper,
-    navigation: any,
-    route: any,
-}
+export default function SignInScreen() {
+    const context = React.useContext(AuthContext);
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [error, setError] = React.useState('');
 
-interface IStates {
-    username: string,
-    password: string,
-    error: string
-}
 
-/**
- * @class AuthenticationForm
- * @extends {Component<any, states>}
- * @description This class is used to authenticate the user.
- */
-export default class SignInScreen extends Component<IMyProps> {
-    static contextType = AuthContext;
-    state: IStates = { username: '', password: '', error: '' };
-
-    constructor(props: any) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    /**
-     * @description: This method is called when the user puts data in texts fields
-     * @param name 
-     * @param value 
-     */
-    handleChange(name: string, value: string) {
-        this.setState({ [name]: value });
-    }
-
-    /**
-     * @description: This function is called when the user clicks the submit button.
-     */
-    async handleSubmit() {
+    const handleSubmit = async () => {
         // Delete error message
-        this.handleChange('error', '');
-
+        setError('');
         try {
-            await this.context.authenticate(this.state.username, this.state.password);
-        } catch (error) {
-            this.handleChange('error', 'Email ou mot de passe incorrect');
+            await context.authenticate(username, password);
+        } catch (error: any) {
+            if (error.response.status === 401) {
+                setError('Identifiants incorrects');
+            } else {
+                setError('Une erreur est survenue');
+            }
         }
     }
 
-    render() {
-        return (
-            <View style={styles.container} >
-                <Header> Connexion </Header>
-                <View style={styles.form} >
-                    <Text  >Nom d'utilisateur</Text>
-                    <TextInput style={styles.input} value={this.state.username} onChangeText={(text) => this.handleChange('username', text)} keyboardType={'email-address'} placeholder="Email" />
-                    <Text>Mot de passe</Text>
-                    <TextInput secureTextEntry={true} style={styles.input} value={this.state.password} onChangeText={(text) => this.handleChange('password', text)} placeholder="Mot de passe" ></TextInput>
-                    <Text style={styles.error}>{this.state.error}</Text>
-                    <Pressable onPress={this.handleSubmit} style={styles.button}>
-                        <Text style={styles.text}>Se connecter</Text>
-                    </Pressable>
-                </View>
-            </View >
-
-        );
-    }
+    return (
+        <View style={styles.container} >
+            <Header> Connexion </Header>
+            <View style={styles.form} >
+                <Text  >Nom d'utilisateur</Text>
+                <TextInput style={styles.input} value={username} onChangeText={(text) => setUsername(text)} keyboardType={'email-address'} placeholder="Email" />
+                <Text>Mot de passe</Text>
+                <TextInput secureTextEntry={true} style={styles.input} value={password} onChangeText={(text) => setPassword(text)} placeholder="Mot de passe" ></TextInput>
+                <Text style={styles.error}>{error}</Text>
+                <Pressable onPress={handleSubmit} style={styles.button}>
+                    <Text style={styles.text}>Se connecter</Text>
+                </Pressable>
+            </View>
+        </View >
+    );
 }
 
 const styles = StyleSheet.create({
