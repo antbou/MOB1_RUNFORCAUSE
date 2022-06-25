@@ -7,12 +7,12 @@ import StoreHelper from '../expo/StoreHelper';
 
 interface IContextInterface {
     user: {
-        token: any;
         email: string,
         name: string,
         picture: string,
         phone: string,
         isLoggedIn: boolean,
+        token: string;
     },
     setUser: (user: any) => void;
     authenticate: (username: string, password: string) => void;
